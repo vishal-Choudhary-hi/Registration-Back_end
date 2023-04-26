@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 const SignupModel = require("../models/SignupModel");
 
 const signUp = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    if (req.body.optVerified == 1) {
+    if (req.body.optVerified === 1) {
       const user = await SignupModel.findOne({
         $or: [
           { emailId: req.body.emailId },
@@ -23,11 +24,7 @@ const signUp = async (req, res) => {
         process.env.JWT_SECRET_KEY
       );
       await SignupModel.findByIdAndUpdate(signup._id, { token: token });
-      const expirationDate = new Date();
-      expirationDate.setMonth(expirationDate.getMonth() + 1);
-      res.cookie("jwt", token, { httpOnly: true, expires: expirationDate });
-
-      res.status(201).send("Success");
+      res.status(201).send({ token: token });
     } else {
       throw "not verified otp";
     }

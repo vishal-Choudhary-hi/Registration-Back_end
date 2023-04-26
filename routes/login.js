@@ -8,7 +8,7 @@ const login = async (req, res) => {
     if (user) {
       const match = await bcrypt.compare(req.body.password, user.password);
       if (match) {
-        res.status(201).send("Auth successfull");
+        res.status(201).send({ token: user.token });
       } else {
         throw "password not matched";
       }
@@ -16,7 +16,7 @@ const login = async (req, res) => {
       throw "User not registered";
     }
   } catch (error) {
-    res.status(404).send(error);
+    res.status(201).send({ err: error });
   }
 };
 
