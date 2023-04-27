@@ -18,7 +18,7 @@ const verifyOTP = async (req, res) => {
       throw "OTP is expired";
     }
   } catch (error) {
-    res.status(404).send(error);
+    res.status(201).send(error);
   }
 };
 module.exports = verifyOTP;
